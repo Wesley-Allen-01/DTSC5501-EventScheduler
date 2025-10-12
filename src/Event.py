@@ -6,6 +6,7 @@ class Event:
         if self._validate_date(date):
             self.date: str = date
         else:
+            print("ERROR: Invalid date")
             return None
         
         if self._validate_time(start_time) and self._validate_time(end_time):
@@ -26,7 +27,7 @@ class Event:
         split_dt = date.split('-')
         try:
             assert(len(split_dt) == 3)
-            
+
             assert(len(split_dt[0]) == 4)
             year = int(split_dt[0])
             
@@ -34,12 +35,13 @@ class Event:
             month = int(split_dt[1])
             assert(0 < month < 13)
             
-            assert(len(split_dt[0]) == 2)
+            assert(len(split_dt[2]) == 2)
             day = int(split_dt[2])
             assert(0 < day < 32)
             
             return True
-        except:
+        except Exception as e:
+            print(e)
             print("ERROR: Date must be of format: YYYY-MM-DD")
             return False
     
@@ -48,13 +50,14 @@ class Event:
         try:
             assert(len(split_time) == 2)
             
-            assert(len(split_time[0]) == 2)
+            assert(len(split_time[0]) <= 2)
             hour = int(split_time[0])
             assert(0 <= hour < 24)
             
             assert(len(split_time[1]) == 2)
             minute = int(split_time[1])
             assert(0 <= minute < 60)
+            return True
         except:
             print("ERROR: Time must be of format HH:MM")
             return False
