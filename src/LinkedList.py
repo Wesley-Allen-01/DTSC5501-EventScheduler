@@ -88,9 +88,10 @@ class LinkedList:
         return
     
     def _delete_head(self):
-        new_head_node = self.head.next
+        old_head = self.head
+        new_head_node = old_head.next
         self.head = new_head_node
-        return
+        return old_head
         
     
     def _delete_at_idx(self, idx):
@@ -101,10 +102,11 @@ class LinkedList:
             curr_node = curr_node.next
             curr_idx += 1
         
-        new_next_node = curr_node.next.next
-        
+        node_to_delete = curr_node.next
+        new_next_node = node_to_delete.next
         curr_node.next = new_next_node
-        return
+        return node_to_delete
+    
         
     
     def delete(self, idx):
@@ -112,12 +114,38 @@ class LinkedList:
             print("ERROR: This index is invalid")
             return
         elif idx == 0:
-            self._delete_head()
+            deleted_node = self._delete_head()
         else:
-            self._delete_at_idx(idx)
+            deleted_node = self._delete_at_idx(idx)
+        self.length -= 1
+        return deleted_node.event
         
+    def _insertion_sort(self, head, by):
+        # TODO: IMPLEMENT INSERTION SORT FOR LINKED LIST
+        pass
+    
+    def _merge_sort(self, head, by):
+        # TODO: IMPLEMENT MERGE SORT FOR LINKED LIST
+        pass
+    
+    def _quick_sort(self, head, by):
+        # TODO: IMPLEMENT QUICK SORT FOR LINKED LIST
+        pass
+    
+    def sort_list(self, by, method):
+        if method == "insertion":
+            self._insertion_sort(self.head, by)
+        elif method == "merge":
+            self._merge_sort(self.head, by)
+        elif method == "quick":
+            self._quick_sort(self.head, by)
+        else:
+            print("ERROR: Invalid sort method")
+            return
+        return
         
-    def search_by_id(self, id):
+
+    def _linear_search(self, id):
         curr_node = self.head
         
         while curr_node:
@@ -127,6 +155,24 @@ class LinkedList:
         
         print("ERROR: Event ID not found")
         return
+    
+    def _binary_search(self, id):
+        # TODO: IMPLEMENT BINARY SEARCH FOR LINKED LIST
+        pass
+    
+    def search_by_id(self, id, method):
+        if method == "linear":
+            return self._linear_search(id)
+        elif method == "binary":
+            return self._binary_search(id)
+        else:
+            print("ERROR: Invalid search method")
+            print("Acceptable values: [linear, binary]")
+            return
+    
+    def detect_conflicts(self) -> bool:
+        # TODO: IMPLEMENT CONFLICT DETECTION FOR LINKED LIST
+        pass
     
     def list_all(self):
         print(self)
