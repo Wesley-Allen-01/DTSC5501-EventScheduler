@@ -113,8 +113,38 @@ class ArrayList:
             return
         
     def detect_conflicts(self) -> bool:
-        # TODO: IMPLEMENT CONFLICT DETECTION FOR ARRAY LIST
-        pass
+        # Sort Events by Date, Time
+        ## placeholder until sort methods available
+        sorted_events = sorted(
+            self.events,
+            key = lambda ev: (ev.date, int(ev.start_time.split(":")[0])*60 + int(ev.start_time.split(":")[1])) # minutes since midnight
+        )
+
+        conflicts = []
+        known = set()
+
+        for i in range(len(sorted_events)):
+            ev1=sorted_events[i]
+            start1 = int(ev1.start_time.split(":")[0]) * 60 + int(ev1.start_time.split(":")[1])
+            end1 = int(ev1.end_time.split(":")[0]) * 60 + int(ev1.end_time.split(":")[1])
+
+            # compare to other events
+            for j in range(i+1, len(sorted_events)):
+                ev2 = sorted_events[j]
+                if ev1.date != ev2.date:  # exit if other event is on different date
+                    break
+
+                start2 = int(ev2.start_time.split(":")[0]) * 60 + int(ev2.start_time.split(":")[1])
+                end2 = int(ev2.end_time.split(":")[0]) * 60 + int(ev2.end_time.split(":")[1])
+
+                # check for overlap
+                if start1 < end2 and start2 < end1:
+                    pair_id = tuple(sorted((ev1.id, ev2.id)))
+                    if pair_id not in known:
+                        known.add(pair_id)
+                        conflicts.append((ev1, ev2))
+        
+        return conflicts
     
     def list_all(self):
         print(self)
