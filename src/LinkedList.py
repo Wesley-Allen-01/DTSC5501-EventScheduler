@@ -155,21 +155,37 @@ class LinkedList:
         
         print("ERROR: Event ID not found")
         return
-    
-    def _binary_search(self, id):
-        # TODO: IMPLEMENT BINARY SEARCH FOR LINKED LIST
-        # get left and right indices
-        # left_index = 0
-        # right_index = self.length - 1
-        
-        # # while loop
-        # while left_index <= right_index:
-        #     mid_index = (left_index + right_index) // 2
 
-            
-        # if event not found
+    # helper for binary search
+    # returns node at given index
+    def _node_at_idx(self, idx):
+        curr_node = self.head
+        i = 0
+
+        while curr_node and i < idx:
+            curr_node = curr_node.next
+            i += 1
         
-        pass
+        return curr_node
+
+    def _binary_search(self, id):
+        # set left/right indexes
+        left_idx = 0
+        right_idx = self.length - 1
+        # while loop
+        while left_idx <= right_idx:
+            mid_idx = (left_idx + right_idx)//2
+            mid_node = self._node_at_idx(mid_idx)
+
+            if mid_node.event.id == id:
+                return mid_node.event
+            elif mid_node.event.id < id:
+                left_idx = mid_idx + 1
+            else:
+                right_idx = mid_idx - 1
+        # if event not found
+        print("ERROR: Event ID not found")
+        return
     
     def search_by_id(self, id, method):
         if method == "linear":
