@@ -117,7 +117,7 @@ class ArrayList:
         ## placeholder until sort methods available
         sorted_events = sorted(
             self.events,
-            key = lambda ev: (ev.date, int(ev.start_time.split(":")[0])*60 + int(ev.start_time.split(":")[1])) # minutes since midnight
+            key = lambda ev: (ev.date, ev.get_start_hour() * 60 + ev.get_start_min()) # minutes since midnight
         )
 
         conflicts = []
@@ -125,8 +125,8 @@ class ArrayList:
 
         for i in range(len(sorted_events)):
             ev1=sorted_events[i]
-            start1 = int(ev1.start_time.split(":")[0]) * 60 + int(ev1.start_time.split(":")[1])
-            end1 = int(ev1.end_time.split(":")[0]) * 60 + int(ev1.end_time.split(":")[1])
+            start1 = int(ev1.get_start_hour() * 60 + ev1.get_start_min())
+            end1 = int(ev1.get_end_hour() * 60 + ev1.get_end_min())
 
             # compare to other events
             for j in range(i+1, len(sorted_events)):
@@ -134,8 +134,8 @@ class ArrayList:
                 if ev1.date != ev2.date:  # exit if other event is on different date
                     break
 
-                start2 = int(ev2.start_time.split(":")[0]) * 60 + int(ev2.start_time.split(":")[1])
-                end2 = int(ev2.end_time.split(":")[0]) * 60 + int(ev2.end_time.split(":")[1])
+                start2 = int(ev2.get_start_hour() * 60 + ev2.get_start_min())
+                end2 = int(ev2.get_end_hour() * 60 + ev2.get_end_min())
 
                 # check for overlap
                 if start1 < end2 and start2 < end1:

@@ -198,8 +198,14 @@ class LinkedList:
             return
     
     def detect_conflicts(self) -> bool:
-        # TODO: IMPLEMENT CONFLICT DETECTION FOR LINKED LIST
-        pass
+        # Sort Events by Date, Time
+        ## placeholder until sort methods available
+        sorted_events = sorted(
+            self.events,
+            key = lambda ev: (ev.date, int(ev.start_time.split(":")[0])*60 + int(ev.start_time.split(":")[1])) # minutes since midnight
+        )
+
+        return sorted_events
     
     def list_all(self):
         print(self)
