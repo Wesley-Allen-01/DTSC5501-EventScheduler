@@ -1,4 +1,5 @@
 from Event import Event
+import time
 
 class Node:
     def __init__(self, event: Event):
@@ -146,12 +147,17 @@ class LinkedList:
         
 
     def _linear_search(self, id):
+        start = time.time()
+        counter = 1
         curr_node = self.head
         
         while curr_node:
             if curr_node.event.id == id:
+                end = time.time()
+                print(f"Event {id} found in {counter} attempts ({end-start} seconds)")
                 return curr_node.event
             curr_node = curr_node.next
+            counter += 1
         
         print("ERROR: Event ID not found")
         return
@@ -168,20 +174,26 @@ class LinkedList:
         return curr_node
 
     def _binary_search(self, id):
+        start = time.time()
         # set left/right indexes
         left_idx = 0
         right_idx = self.length - 1
+        counter = 1
         # while loop
         while left_idx <= right_idx:
             mid_idx = (left_idx + right_idx)//2
             mid_node = self._node_at_idx(mid_idx)
 
             if mid_node.event.id == id:
+                end = time.time()
+                print(f"Event {id} found in {counter} attempts ({end-start} seconds")
                 return mid_node.event
             elif mid_node.event.id < id:
                 left_idx = mid_idx + 1
+                counter += 1
             else:
                 right_idx = mid_idx - 1
+                counter += 1
         # if event not found
         print("ERROR: Event ID not found")
         return

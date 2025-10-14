@@ -1,4 +1,5 @@
 from Event import Event
+import time
 
 class ArrayList:
     def __init__(self, event=None):
@@ -76,27 +77,39 @@ class ArrayList:
         return
 
     def _linear_search(self, id):
+        start = time.time()
+        counter=1
         for ev in self.events:
             if ev.id == id:
+                end = time.time()
+                tries = counter
+                print(f"Event {ev.id} found in {tries} attempts ({end-start} seconds)")
                 return ev
+            else:
+                counter += 1
         print("ERROR: Event not found")
         return None
     
     def _binary_search(self, id):
+        start = time.time()
         # get left and right indexes
         left_index = 0
         right_index = len(self.events)-1
+        counter = 1
         
         # while loop
         while left_index <= right_index:
             mid_index = (left_index + right_index) // 2
 
             if self.events[mid_index].id == id:
+                end = time.time()
+                print(f"Event {id} found in {counter} attempts ({end-start} seconds) ")
                 return self.events[mid_index]
             elif id < self.events[mid_index].id:
                 right_index = mid_index - 1
             else:
                 left_index = mid_index + 1
+            counter += 1
         
         # if event not found
         print("ERROR: Event not found")
