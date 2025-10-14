@@ -158,6 +158,17 @@ class LinkedList:
     
     def _binary_search(self, id):
         # TODO: IMPLEMENT BINARY SEARCH FOR LINKED LIST
+        # get left and right indices
+        # left_index = 0
+        # right_index = self.length - 1
+        
+        # # while loop
+        # while left_index <= right_index:
+        #     mid_index = (left_index + right_index) // 2
+
+            
+        # if event not found
+        
         pass
     
     def search_by_id(self, id, method):

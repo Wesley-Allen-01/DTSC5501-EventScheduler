@@ -83,9 +83,25 @@ class ArrayList:
         return None
     
     def _binary_search(self, id):
-        # TODO: IMPLEMENT BINARY SEARCH FOR ARRAY LIST
-        pass
-    
+        # get left and right indexes
+        left_index = 0
+        right_index = len(self.events)-1
+        
+        # while loop
+        while left_index <= right_index:
+            mid_index = (left_index + right_index) // 2
+
+            if self.events[mid_index].id == id:
+                return self.events[mid_index]
+            elif id < self.events[mid_index].id:
+                right_index = mid_index - 1
+            else:
+                left_index = mid_index + 1
+        
+        # if event not found
+        print("ERROR: Event not found")
+        return None
+        
     def search_by_id(self, id, method):
         if method == "linear":
             return self._linear_search(id)
@@ -94,7 +110,7 @@ class ArrayList:
         else:
             print("ERROR: Invalid search method")
             print("Acceptable values: [linear, binary]")
-            return
+            # return
         
     def detect_conflicts(self) -> bool:
         # TODO: IMPLEMENT CONFLICT DETECTION FOR ARRAY LIST
