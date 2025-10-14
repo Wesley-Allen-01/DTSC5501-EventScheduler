@@ -156,8 +156,7 @@ class LinkedList:
         print("ERROR: Event ID not found")
         return
 
-    # helper for binary search
-    # returns node at given index
+    # helper, returns node at given index
     def _node_at_idx(self, idx):
         curr_node = self.head
         i = 0
@@ -197,15 +196,38 @@ class LinkedList:
             print("Acceptable values: [linear, binary]")
             return
     
-    def detect_conflicts(self) -> bool:
-        # Sort Events by Date, Time
-        ## placeholder until sort methods available
-        sorted_events = sorted(
-            self.events,
-            key = lambda ev: (ev.date, int(ev.start_time.split(":")[0])*60 + int(ev.start_time.split(":")[1])) # minutes since midnight
-        )
+    def _detect_conflicts(self) -> bool:
+        conflicts = []
+        known = set()
 
-        return sorted_events
+        # outer loop (first event)
+        curr_node = self.head
+        while curr_node:
+            ev1 = curr_node.event
+            start1 = ev1.get_start_hour()*60 + ev1.get_start_min()
+            end1 = ev1.get_end_hour()*60 + ev1.get_end_min()
+
+            # inner loop (compare rest of events)
+            next_node = curr_node.next
+            while next_node:
+                ev2 = next_node.event
+                start2 = ev2.get_start_hour()*60 + ev2.get_start_min()
+                end2 = ev2.get_end_hour()*60 + ev2.get_end_min()
+
+                # check date
+                if ev1.date == ev2.date:
+                    start2 = ev2.get_start_hour()*60 + ev2.get_start_min()
+                    end2 = ev2.get_end_hour()*60 + ev2.get_end_min()
+
+                    # check overlap
+                    if start1 < end2 and start2 < end1:
+                        pair = tuple(sorted((ev1.id, ev2.id)))
+                        if pair not in known:
+                            known.add(pair)
+                            conflicts.append((ev1, ev2))
+                next_node = next_node.next
+            curr_node = curr_node.next
+        return conflicts
     
     def list_all(self):
         print(self)
