@@ -110,7 +110,7 @@ class ArrayList:
         else:
             print("ERROR: Invalid search method")
             print("Acceptable values: [linear, binary]")
-            # return
+            return
         
     def detect_conflicts(self) -> bool:
         # TODO: IMPLEMENT CONFLICT DETECTION FOR ARRAY LIST
