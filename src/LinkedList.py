@@ -208,7 +208,9 @@ class LinkedList:
             print("Acceptable values: [linear, binary]")
             return
     
-    def _detect_conflicts(self) -> bool:
+    def _detect_conflicts(self):
+        start = time.time()
+        
         conflicts = []
         known = set()
 
@@ -239,6 +241,9 @@ class LinkedList:
                             conflicts.append((ev1, ev2))
                 next_node = next_node.next
             curr_node = curr_node.next
+        
+        end = time.time()
+        print(f"{len(conflicts)} conflicts detected in {end-start}")
         return conflicts
     
     def list_all(self):

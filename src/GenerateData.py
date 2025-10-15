@@ -5,25 +5,24 @@ def create_event_dataset(n: int, type: str):
     from Event import Event
     from ArrayList import ArrayList
     from LinkedList import LinkedList
-
-    # -------------------------
-    # Cities and durations
-    # -------------------------
+    
+    # arbitrary locations to choose from
     cities = [
-        "New York", "London", "Tokyo", "Paris", "Berlin", "Sydney", "Toronto", "Dubai",
-        "Singapore", "Barcelona", "Rome", "Istanbul", "Bangkok", "Los Angeles", "Cape Town",
-        "Seoul", "Moscow", "Mexico City", "Sao Paulo", "Mumbai"
+        "New York","London", "Tokyo", "Paris", "Berlin", "Sydney","Toronto", "Dubai",
+        "Singapore", "Barcelona", "Rome","Istanbul", "Bangkok", "Los Angeles", "Cape Town",
+        "Seoul","Moscow", "Mexico City", "Sao Paulo", "Mumbai", 'Kyoto', 'Osaka', 'New Orleans',
+        "Amsterdam", 'Copenhagen', "Kiev"
     ]
 
-    durations = [15, 30, 60, 90, 120, 150]
-    weights = [1, 5, 5, 2, 1, 1]
+    # event duration, weighted to favor 30- and 60-minutes
+    durations = [15, 30, 60, 90, 120, 150, 180]
+    weights = [1, 5, 5, 2, 1, 2, 1]
 
+    # possible data range
     start_date = datetime(2025, 8, 1)
-    end_date = datetime(2027, 8, 1)
+    end_date = datetime(2029, 8, 1)
 
-    # -------------------------
-    # Helpers
-    # -------------------------
+    # name events like excel columns
     def generate_event_title(index):
         letters = string.ascii_uppercase
         title = ""
@@ -41,17 +40,13 @@ def create_event_dataset(n: int, type: str):
     def format_date(dt):
         return dt.strftime("%Y-%m-%d")
 
-    # -------------------------
-    # Container selection
-    # -------------------------
+    # pick Array or LinkedList
     if type not in ["array", "ll"]:
         raise ValueError("Invalid type. Must be 'array' or 'll'")
 
     container = ArrayList() if type == "array" else LinkedList()
 
-    # -------------------------
-    # Event generation
-    # -------------------------
+    # make events
     for i in range(n):
         # Random date
         days_offset = random.randint(0, (end_date - start_date).days)
@@ -60,12 +55,11 @@ def create_event_dataset(n: int, type: str):
         # Duration
         duration = random.choices(durations, weights=weights, k=1)[0]
 
-        # Start time between 08:00 and 18:00
-        start_hour = random.randint(8, 18)
+        # Start time between 08:00 and 19:00
+        start_hour = random.randint(8, 19)
         start_minute = random.choice([0, 15, 30, 45])
         start_dt = datetime.combine(event_date, datetime.min.time()) + timedelta(
-            hours=start_hour, minutes=start_minute
-        )
+            hours=start_hour, minutes=start_minute)
 
         # End time (max 23:59)
         end_dt = start_dt + timedelta(minutes=duration)

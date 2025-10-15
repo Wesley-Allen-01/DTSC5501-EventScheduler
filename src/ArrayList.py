@@ -125,7 +125,8 @@ class ArrayList:
             print("Acceptable values: [linear, binary]")
             return
         
-    def detect_conflicts(self) -> bool:
+    def detect_conflicts(self):
+        start = time.time()
         # Sort Events by Date, Time
         ## placeholder until sort methods available
         sorted_events = sorted(
@@ -157,6 +158,8 @@ class ArrayList:
                         known.add(pair_id)
                         conflicts.append((ev1, ev2))
         
+        end = time.time()
+        print(f"{len(conflicts)} conflicts identified in {end-start} seconds")
         return conflicts
     
     def list_all(self):
