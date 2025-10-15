@@ -53,7 +53,7 @@ class ArrayList:
         return item_to_delete
     
     def _insertion_sort(self, head, by):
-        # TODO: IMPLEMENT INSERTION SORT FOR ARRAY LIST
+        
         for i in range(1, len(head)):
             key = head[i]
             j = i - 1
@@ -64,7 +64,7 @@ class ArrayList:
         self.events = head
     
     def _merge_sort(self, head, by):
-        # TODO: IMPLEMENT MERGE SORT FOR ARRAY LIST
+        
         def _merge(self, left, right, by):
             merged = []
             i = j = 0
@@ -91,7 +91,7 @@ class ArrayList:
         return _merge(self, left, right, by)
     
     def _quick_sort(self, head, by):
-        # TODO: IMPLEMENT QUICK SORT FOR ARRAY LIST
+        
         if len(head) <= 1:
             return head
 
