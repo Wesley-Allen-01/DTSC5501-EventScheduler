@@ -89,3 +89,39 @@ class Event:
     def get_end_min(self):
         time = self.end_time.split(":")
         return int(time[1])
+    
+    
+def compare_event_times(a: Event, b: Event):
+    """
+    This functiont takes two events as inputs. If event a starts before event b,
+    we return 1. if b starts before a we return -1
+    """
+    a_year = a.get_year()
+    a_month = a.get_month()
+    a_day = a.get_day()
+    a_date = a_year * 365 + a_month * 31 + a_day
+    b_year = b.get_year()
+    b_month = b.get_month()
+    b_day = b.get_day()
+    b_date = b_year * 365 + b_month * 31 + b_day
+    if a_date < b_date:
+        return 1
+    elif a_date > b_date:
+        return -1
+    
+    # if we reach this point, events are on same day and we must compare time
+    a_start_hour = a.get_start_hour()
+    a_start_min = a.get_start_min()
+    a_time = a_start_hour * 60 + a_start_min
+    
+    b_start_hour = b.get_start_hour()
+    b_start_min = b.get_start_min()
+    b_time = b_start_hour * 60 + b_start_min
+
+    if a_time <= b_time:
+        return 1
+    elif a_time > b_time:
+        return -1
+    else:
+        print("ERROR: This should never be printed")
+        return
