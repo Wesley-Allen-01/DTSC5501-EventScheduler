@@ -226,7 +226,7 @@ class LinkedList:
         while curr_node:
             if curr_node.event.id == id:
                 end = time.time()
-                print(f"Event {id} found in {counter} attempts ({end-start} seconds)")
+                print(f"Event {id} found in {counter} attempts ({(end-start):.4f} seconds)")
                 return curr_node.event
             curr_node = curr_node.next
             counter += 1
@@ -247,7 +247,7 @@ class LinkedList:
 
     
     def _binary_search(self, id):
-        sorted_self = self.sort_list(by="id")
+        sorted_self = self.sort_list(method="merge", by="id")
         start = time.time()
         # set left/right indexes
         left_idx = 0
@@ -260,7 +260,7 @@ class LinkedList:
 
             if mid_node.event.id == id:
                 end = time.time()
-                print(f"Event {id} found in {counter} attempts ({end-start} seconds")
+                print(f"Event {id} found in {counter} attempts ({(end-start):.4f} seconds)")
                 return mid_node.event
             elif mid_node.event.id < id:
                 left_idx = mid_idx + 1
