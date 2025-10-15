@@ -122,127 +122,111 @@ class LinkedList:
         return deleted_node.event
         
     def _insertion_sort(self, by):
-        # TODO: IMPLEMENT INSERTION SORT FOR LINKED LIST
         if not self.head or not self.head.next:
-            return self  
+            return LinkedList()
 
         sorted_list = LinkedList()
-
         curr = self.head
-        while curr:
-            next = curr.next
-            curr.next = None  
 
-           
+        
+        while curr:
+            ev = curr.event
+
+            
             if not sorted_list.head:
-                sorted_list.head = Node(curr.event)
+                sorted_list.head = Node(ev)
                 sorted_list.length = 1
             else:
                 sorted_curr = sorted_list.head
                 prev = None
 
+                
                 while sorted_curr:
-                    if by == "time":
-                        cmp_result = compare_event_times(curr.event, sorted_curr.event)
-                        
-                        if cmp_result == 1:
-                            break
-                    elif by == "id":
-                        if curr.event.id < sorted_curr.event.id:
-                            break
+                    cmp = (compare_event_times(ev, sorted_curr.event)
+                           if by == "time" else
+                           (1 if ev.id < sorted_curr.event.id else -1))
+                    if cmp == 1:
+                        break
                     prev = sorted_curr
                     sorted_curr = sorted_curr.next
 
-                new = Node(curr.event)
-                if prev is None:  
-                    new.next = sorted_list.head
-                    sorted_list.head = new
+                new_node = Node(ev)
+                if prev is None:
+                    # Insert at head
+                    new_node.next = sorted_list.head
+                    sorted_list.head = new_node
                 else:
-                    new.next = sorted_curr
-                    prev.next = new
+                    new_node.next = sorted_curr
+                    prev.next = new_node
+
                 sorted_list.length += 1
 
-            curr = next
+            curr = curr.next
 
         return sorted_list
-    
+
+
+
+   
     def _split_list(self):
-        """ 
-        splits a LL into 2 halves. returns two lists
-        
-        Note: this function does not modify the internal LL
-        """
+        if self.length == 0 or self.head is None:
+            return LinkedList(), LinkedList()
+
         mid = self.length // 2
         left = LinkedList()
         right = LinkedList()
-        
-        curr_node = self.head
-        curr_idx = 0
-        while curr_idx < mid:
-            left.insert(curr_node.event)
-            curr_node = curr_node.next
-            curr_idx += 1
-        
-        while curr_node:
-            right.insert(curr_node.event)
-            curr_node = curr_node.next
-            
+        curr = self.head
+        idx = 0
+
+        while curr and idx < mid:
+            left.insert(curr.event)
+            curr = curr.next
+            idx += 1
+        while curr:
+            right.insert(curr.event)
+            curr = curr.next
         return left, right
-    
+
     def _merge_lists(self, l, r, by):
-        """
-        Given to sorted LLs, merge them to create one sorted list
-        """
-        merged_list = LinkedList()
-        
-        l_curr_node = l.head
-        r_curr_node = r.head
-        
-        while l_curr_node and r_curr_node:
+        merged = LinkedList()
+        l_curr, r_curr = l.head, r.head
+        while l_curr and r_curr:
             if by == "time":
-                if compare_event_times(l_curr_node.event, r_curr_node.event) == 1:
-                    merged_list.insert(l_curr_node.event)
-                    l_curr_node = l_curr_node.next
+                if compare_event_times(l_curr.event, r_curr.event) == 1:
+                    merged.insert(l_curr.event)
+                    l_curr = l_curr.next
                 else:
-                    merged_list.insert(r_curr_node.event)
-                    r_curr_node = r_curr_node.next
-            elif by == "id":
-                if l_curr_node.event.id < r_curr_node.event.id:
-                    merged_list.insert(l_curr_node.event)
-                    l_curr_node = l_curr_node.next
+                    merged.insert(r_curr.event)
+                    r_curr = r_curr.next
+            else:
+                if l_curr.event.id < r_curr.event.id:
+                    merged.insert(l_curr.event)
+                    l_curr = l_curr.next
                 else:
-                    merged_list.insert(r_curr_node.event)
-                    r_curr_node = r_curr_node.next
-        while l_curr_node:
-            merged_list.insert(l_curr_node.event)
-            l_curr_node = l_curr_node.next
-            
-        while r_curr_node:
-            merged_list.insert(r_curr_node.event)
-            r_curr_node = r_curr_node.next
-        
-        return merged_list
+                    merged.insert(r_curr.event)
+                    r_curr = r_curr.next
+
+        while l_curr:
+            merged.insert(l_curr.event)
+            l_curr = l_curr.next
+        while r_curr:
+            merged.insert(r_curr.event)
+            r_curr = r_curr.next
+        return merged
 
     def _merge_sort(self, by):
-        # print(self)
         if self.length <= 1:
             return self
-        
-        
         left_half, right_half = self._split_list()
-        
         left_sorted = left_half._merge_sort(by)
         right_sorted = right_half._merge_sort(by)
-
         return self._merge_lists(left_sorted, right_sorted, by)
-        
-    
+
+  
     def _quick_sort(self, by):
-        # TODO: IMPLEMENT QUICK SORT FOR LINKED LIST
         if self.length <= 1:
             return self
 
-        
         pivot_event = self.head.event
         left = LinkedList()
         right = LinkedList()
@@ -252,45 +236,26 @@ class LinkedList:
         curr = self.head.next
         while curr:
             ev = curr.event
-            if by == "time":
-                cmp = compare_event_times(ev, pivot_event)
-                
-                if cmp == 1:
-                    left.insert(ev)
-                elif cmp == -1:
-                    right.insert(ev)
-                else:
-                    equal.insert(ev)
-            elif by == "id":
-                if ev.id < pivot_event.id:
-                    left.insert(ev)
-                elif ev.id > pivot_event.id:
-                    right.insert(ev)
-                else:
-                    equal.insert(ev)
+            cmp = (compare_event_times(ev, pivot_event)
+                   if by == "time"
+                   else (1 if ev.id < pivot_event.id else -1 if ev.id > pivot_event.id else 0))
+            if cmp == 1:
+                left.insert(ev)
+            elif cmp == -1:
+                right.insert(ev)
+            else:
+                equal.insert(ev)
             curr = curr.next
 
         left_sorted = left._quick_sort(by) if left.length > 1 else left
         right_sorted = right._quick_sort(by) if right.length > 1 else right
 
-        
         merged = LinkedList()
-
-        curr = left_sorted.head
-        while curr:
-            merged.insert(curr.event)
-            curr = curr.next
-
-        curr = equal.head
-        while curr:
-            merged.insert(curr.event)
-            curr = curr.next
-
-        curr = right_sorted.head
-        while curr:
-            merged.insert(curr.event)
-            curr = curr.next
-
+        for part in [left_sorted, equal, right_sorted]:
+            curr = part.head
+            while curr:
+                merged.insert(curr.event)
+                curr = curr.next
         return merged
     
     def sort_list(self, method, by="time"):
