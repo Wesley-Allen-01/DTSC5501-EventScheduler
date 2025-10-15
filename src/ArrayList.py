@@ -54,15 +54,53 @@ class ArrayList:
     
     def _insertion_sort(self, head, by):
         # TODO: IMPLEMENT INSERTION SORT FOR ARRAY LIST
-        pass
+        for i in range(1, len(head)):
+            key = head[i]
+            j = i - 1
+            while j >= 0 and getattr(head[j], by) > getattr(key, by):
+                head[j + 1] = head[j]
+                j -= 1
+            head[j + 1] = key
+        self.events = head
     
     def _merge_sort(self, head, by):
         # TODO: IMPLEMENT MERGE SORT FOR ARRAY LIST
-        pass
+        def _merge(self, left, right, by):
+            merged = []
+            i = j = 0
+    
+            while i < len(left) and j < len(right):
+                if getattr(left[i], by) <= getattr(right[j], by):
+                    merged.append(left[i])
+                    i += 1
+                else:
+                    merged.append(right[j])
+                    j += 1
+    
+            merged.extend(left[i:])
+            merged.extend(right[j:])
+            return merged
+            
+        if len(head) <= 1:
+            return head
+
+        mid = len(head) // 2
+        left = self._merge_sort(head[:mid], by)
+        right = self._merge_sort(head[mid:], by)
+
+        return _merge(self, left, right, by)
     
     def _quick_sort(self, head, by):
         # TODO: IMPLEMENT QUICK SORT FOR ARRAY LIST
-        pass
+        if len(head) <= 1:
+            return head
+
+        pivot = head[len(head)//2]
+        left = [x for x in head if getattr(x, by) < getattr(pivot, by)]
+        middle = [x for x in head if getattr(x, by) == getattr(pivot, by)]
+        right = [x for x in head if getattr(x, by) > getattr(pivot, by)]
+
+        return self._quick_sort(left, by) + middle + self._quick_sort(right, by)
     
     def sort_list(self, by, method):
         if method == "insertion":
