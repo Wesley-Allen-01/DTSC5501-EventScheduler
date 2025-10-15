@@ -123,7 +123,48 @@ class LinkedList:
         
     def _insertion_sort(self, by):
         # TODO: IMPLEMENT INSERTION SORT FOR LINKED LIST
-        pass
+        if not self.head or not self.head.next:
+            return self  
+
+        sorted_list = LinkedList()
+
+        curr = self.head
+        while curr:
+            next = curr.next
+            curr.next = None  
+
+           
+            if not sorted_list.head:
+                sorted_list.head = Node(curr.event)
+                sorted_list.length = 1
+            else:
+                sorted_curr = sorted_list.head
+                prev = None
+
+                while sorted_curr:
+                    if by == "time":
+                        cmp_result = compare_event_times(curr.event, sorted_curr.event)
+                        
+                        if cmp_result == 1:
+                            break
+                    elif by == "id":
+                        if curr.event.id < sorted_curr.event.id:
+                            break
+                    prev = sorted_curr
+                    sorted_curr = sorted_curr.next
+
+                new = Node(curr.event)
+                if prev is None:  
+                    new.next = sorted_list.head
+                    sorted_list.head = new
+                else:
+                    new.next = sorted_curr
+                    prev.next = new
+                sorted_list.length += 1
+
+            curr = next
+
+        return sorted_list
     
     def _split_list(self):
         """ 
@@ -198,7 +239,59 @@ class LinkedList:
     
     def _quick_sort(self, by):
         # TODO: IMPLEMENT QUICK SORT FOR LINKED LIST
-        pass
+        if self.length <= 1:
+            return self
+
+        
+        pivot_event = self.head.event
+        left = LinkedList()
+        right = LinkedList()
+        equal = LinkedList()
+        equal.insert(pivot_event)
+
+        curr = self.head.next
+        while curr:
+            ev = curr.event
+            if by == "time":
+                cmp = compare_event_times(ev, pivot_event)
+                
+                if cmp == 1:
+                    left.insert(ev)
+                elif cmp == -1:
+                    right.insert(ev)
+                else:
+                    equal.insert(ev)
+            elif by == "id":
+                if ev.id < pivot_event.id:
+                    left.insert(ev)
+                elif ev.id > pivot_event.id:
+                    right.insert(ev)
+                else:
+                    equal.insert(ev)
+            curr = curr.next
+
+        left_sorted = left._quick_sort(by) if left.length > 1 else left
+        right_sorted = right._quick_sort(by) if right.length > 1 else right
+
+        
+        merged = LinkedList()
+
+        curr = left_sorted.head
+        while curr:
+            merged.insert(curr.event)
+            curr = curr.next
+
+        curr = equal.head
+        while curr:
+            merged.insert(curr.event)
+            curr = curr.next
+
+        curr = right_sorted.head
+        while curr:
+            merged.insert(curr.event)
+            curr = curr.next
+
+        return merged
     
     def sort_list(self, method, by="time"):
         if by not in ["time", "id"]:
