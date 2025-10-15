@@ -1,4 +1,5 @@
 from Event import Event
+import time
 
 class ArrayList:
     def __init__(self, event=None):
@@ -76,27 +77,39 @@ class ArrayList:
         return
 
     def _linear_search(self, id):
+        start = time.time()
+        counter=1
         for ev in self.events:
             if ev.id == id:
+                end = time.time()
+                tries = counter
+                print(f"Event {ev.id} found in {tries} attempts ({end-start} seconds)")
                 return ev
+            else:
+                counter += 1
         print("ERROR: Event not found")
         return None
     
     def _binary_search(self, id):
+        start = time.time()
         # get left and right indexes
         left_index = 0
         right_index = len(self.events)-1
+        counter = 1
         
         # while loop
         while left_index <= right_index:
             mid_index = (left_index + right_index) // 2
 
             if self.events[mid_index].id == id:
+                end = time.time()
+                print(f"Event {id} found in {counter} attempts ({end-start} seconds) ")
                 return self.events[mid_index]
             elif id < self.events[mid_index].id:
                 right_index = mid_index - 1
             else:
                 left_index = mid_index + 1
+            counter += 1
         
         # if event not found
         print("ERROR: Event not found")
@@ -112,12 +125,13 @@ class ArrayList:
             print("Acceptable values: [linear, binary]")
             return
         
-    def detect_conflicts(self) -> bool:
+    def detect_conflicts(self):
+        start = time.time()
         # Sort Events by Date, Time
         ## placeholder until sort methods available
         sorted_events = sorted(
             self.events,
-            key = lambda ev: (ev.date, int(ev.start_time.split(":")[0])*60 + int(ev.start_time.split(":")[1])) # minutes since midnight
+            key = lambda ev: (ev.date, ev.get_start_hour() * 60 + ev.get_start_min()) # minutes since midnight
         )
 
         conflicts = []
@@ -125,8 +139,8 @@ class ArrayList:
 
         for i in range(len(sorted_events)):
             ev1=sorted_events[i]
-            start1 = int(ev1.start_time.split(":")[0]) * 60 + int(ev1.start_time.split(":")[1])
-            end1 = int(ev1.end_time.split(":")[0]) * 60 + int(ev1.end_time.split(":")[1])
+            start1 = int(ev1.get_start_hour() * 60 + ev1.get_start_min())
+            end1 = int(ev1.get_end_hour() * 60 + ev1.get_end_min())
 
             # compare to other events
             for j in range(i+1, len(sorted_events)):
@@ -134,8 +148,8 @@ class ArrayList:
                 if ev1.date != ev2.date:  # exit if other event is on different date
                     break
 
-                start2 = int(ev2.start_time.split(":")[0]) * 60 + int(ev2.start_time.split(":")[1])
-                end2 = int(ev2.end_time.split(":")[0]) * 60 + int(ev2.end_time.split(":")[1])
+                start2 = int(ev2.get_start_hour() * 60 + ev2.get_start_min())
+                end2 = int(ev2.get_end_hour() * 60 + ev2.get_end_min())
 
                 # check for overlap
                 if start1 < end2 and start2 < end1:
@@ -144,6 +158,8 @@ class ArrayList:
                         known.add(pair_id)
                         conflicts.append((ev1, ev2))
         
+        end = time.time()
+        print(f"{len(conflicts)} conflicts identified in {end-start} seconds")
         return conflicts
     
     def list_all(self):

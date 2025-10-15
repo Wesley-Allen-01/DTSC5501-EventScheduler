@@ -1,4 +1,5 @@
 from Event import Event, compare_event_times
+import time
 
 class Node:
     def __init__(self, event: Event):
@@ -218,18 +219,22 @@ class LinkedList:
 
 
     def _linear_search(self, id):
+        start = time.time()
+        counter = 1
         curr_node = self.head
         
         while curr_node:
             if curr_node.event.id == id:
+                end = time.time()
+                print(f"Event {id} found in {counter} attempts ({(end-start):.4f} seconds)")
                 return curr_node.event
             curr_node = curr_node.next
+            counter += 1
         
         print("ERROR: Event ID not found")
         return
 
-    # helper for binary search
-    # returns node at given index
+    # helper, returns node at given index
     def _node_at_idx(self, idx):
         curr_node = self.head
         i = 0
@@ -242,23 +247,27 @@ class LinkedList:
 
     
     def _binary_search(self, id):
-        # binary search can only be done on a sorted list!
         sorted_self = self.sort_list(method="merge", by="id")
-        
+        start = time.time()
         # set left/right indexes
         left_idx = 0
         right_idx = sorted_self.length - 1
+        counter = 1
         # while loop
         while left_idx <= right_idx:
             mid_idx = (left_idx + right_idx)//2
             mid_node = sorted_self._node_at_idx(mid_idx)
 
             if mid_node.event.id == id:
+                end = time.time()
+                print(f"Event {id} found in {counter} attempts ({(end-start):.4f} seconds)")
                 return mid_node.event
             elif mid_node.event.id < id:
                 left_idx = mid_idx + 1
+                counter += 1
             else:
                 right_idx = mid_idx - 1
+                counter += 1
         # if event not found
         print("ERROR: Event ID not found")
         return
@@ -273,9 +282,48 @@ class LinkedList:
             print("Acceptable values: [linear, binary]")
             return
     
-    def detect_conflicts(self) -> bool:
-        # TODO: IMPLEMENT CONFLICT DETECTION FOR LINKED LIST
-        pass
+    def _detect_conflicts(self):
+        start = time.time()
+        
+        conflicts = []
+        known = set()
+
+        # group events by date to reduce number of checks
+        event_dates = {}
+        my_node = self.head
+        while my_node:
+            event = my_node.event
+            date = event.date
+            if date not in event_dates:
+                event_dates[date] = []
+            event_dates[date].append(event)
+            my_node = my_node.next
+
+        for dt in event_dates:
+            evs = event_dates[dt]
+
+            # outer loop
+            for i in range(len(evs)):
+                ev1 = evs[i]
+                start1 = ev1.get_start_hour()*60 + ev1.get_start_min()
+                end1 = ev1.get_end_hour()*60 + ev1.get_end_min()
+
+                # inner loop
+                for j in range(i+1, len(evs)):
+                    ev2 = evs[j]
+                    start2 = ev2.get_start_hour()*60 + ev2.get_start_min()
+                    end2 = ev2.get_end_hour()*60 + ev2.get_end_min()
+
+                    # check overlap
+                    if start1 < end2 and start2 < end1:
+                        pair = tuple((min(ev1.id, ev2.id), max(ev1.id, ev2.id)))
+                        if pair not in known:
+                            known.add(pair)
+                            conflicts.append((ev1, ev2))
+        
+        end = time.time()
+        print(f"{len(conflicts)} conflicts detected in {end-start} seconds")
+        return conflicts
     
     def list_all(self):
         print(self)
