@@ -214,36 +214,41 @@ class LinkedList:
         conflicts = []
         known = set()
 
-        # outer loop (first event)
-        curr_node = self.head
-        while curr_node:
-            ev1 = curr_node.event
-            start1 = ev1.get_start_hour()*60 + ev1.get_start_min()
-            end1 = ev1.get_end_hour()*60 + ev1.get_end_min()
+        # group events by date to reduce number of checks
+        event_dates = {}
+        my_node = self.head
+        while my_node:
+            event = my_node.event
+            date = event.date
+            if date not in event_dates:
+                event_dates[date] = []
+            event_dates[date].append(event)
+            my_node = my_node.next
 
-            # inner loop (compare rest of events)
-            next_node = curr_node.next
-            while next_node:
-                ev2 = next_node.event
-                start2 = ev2.get_start_hour()*60 + ev2.get_start_min()
-                end2 = ev2.get_end_hour()*60 + ev2.get_end_min()
+        for dt in event_dates:
+            evs = event_dates[dt]
 
-                # check date
-                if ev1.date == ev2.date:
+            # outer loop
+            for i in range(len(evs)):
+                ev1 = evs[i]
+                start1 = ev1.get_start_hour()*60 + ev1.get_start_min()
+                end1 = ev1.get_end_hour()*60 + ev1.get_end_min()
+
+                # inner loop
+                for j in range(i+1, len(evs)):
+                    ev2 = evs[j]
                     start2 = ev2.get_start_hour()*60 + ev2.get_start_min()
                     end2 = ev2.get_end_hour()*60 + ev2.get_end_min()
 
                     # check overlap
                     if start1 < end2 and start2 < end1:
-                        pair = tuple(sorted((ev1.id, ev2.id)))
+                        pair = tuple((min(ev1.id, ev2.id), max(ev1.id, ev2.id)))
                         if pair not in known:
                             known.add(pair)
                             conflicts.append((ev1, ev2))
-                next_node = next_node.next
-            curr_node = curr_node.next
         
         end = time.time()
-        print(f"{len(conflicts)} conflicts detected in {end-start}")
+        print(f"{len(conflicts)} conflicts detected in {end-start} seconds")
         return conflicts
     
     def list_all(self):
