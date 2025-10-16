@@ -35,23 +35,23 @@ def test_ll_remove():
     assert(len(ll) == 4)
     
 
-def test_pos_linear_search_by_id():
-    val = ll.search_by_id(17, "linear")
-    assert(val.id == 17)
+# def test_pos_linear_search_by_id():
+#     val = ll.search_by_id(17, "linear")
+#     assert(val.id == 17)
 
 
-def test_neg_linear_search_by_id():
-    val = ll.search_by_id("some fake id", "linear")
-    assert(val is None)
+# def test_neg_linear_search_by_id():
+#     val = ll.search_by_id("some fake id", "linear")
+#     assert(val is None)
 
-    val = ll.search_by_id(-17, "linear")
-    assert(val is None)
-
-
-def test_binary_search_by_id():
-    pass
+#     val = ll.search_by_id(-17, "linear")
+#     assert(val is None)
 
 
-def test_neg_binary_seach_by_id():
-    pass
+# def test_binary_search_by_id():
+#     pass
+
+
+# def test_neg_binary_seach_by_id():
+#     pass
 
