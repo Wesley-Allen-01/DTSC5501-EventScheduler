@@ -170,24 +170,21 @@ class ArrayList:
         
     def detect_conflicts(self):
         start = time.time()
-        # Sort Events by Date, Time
-        ## placeholder until sort methods available
-        sorted_events = sorted(
-            self.events,
-            key = lambda ev: (ev.date, ev.get_start_hour() * 60 + ev.get_start_min()) # minutes since midnight
-        )
+
+        # optimization - sort events first
+        sorted_events = self.sort_list(by="date", method="merge")
 
         conflicts = []
         known = set()
 
-        for i in range(len(sorted_events)):
-            ev1=sorted_events[i]
+        for i in range(len(sorted_events.events)):
+            ev1=sorted_events.events[i]
             start1 = int(ev1.get_start_hour() * 60 + ev1.get_start_min())
             end1 = int(ev1.get_end_hour() * 60 + ev1.get_end_min())
 
             # compare to other events
-            for j in range(i+1, len(sorted_events)):
-                ev2 = sorted_events[j]
+            for j in range(i+1, len(sorted_events.events)):
+                ev2 = sorted_events.events[j]
                 if ev1.date != ev2.date:  # exit if other event is on different date
                     break
 
