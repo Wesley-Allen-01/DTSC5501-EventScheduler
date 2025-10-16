@@ -305,12 +305,17 @@ class LinkedList:
 
     
     def _binary_search(self, id):
-        # sorted_self = self.sort_list(method="merge", by="id")
+        if not isinstance(id, int):
+            print("ERROR: id must be integer")
+            return None
+            
         start = time.time()
+        
         # set left/right indexes
         left_idx = 0
         right_idx = self.length - 1
         counter = 1
+        
         # while loop
         while left_idx <= right_idx:
             mid_idx = (left_idx + right_idx)//2
@@ -319,6 +324,7 @@ class LinkedList:
             if mid_node.event.id == id:
                 end = time.time()
                 print(f"Event {id} found in {counter} attempts ({(end-start):.4f} seconds)")
+                print(mid_node.event)
                 return mid_node.event
             elif mid_node.event.id < id:
                 left_idx = mid_idx + 1
