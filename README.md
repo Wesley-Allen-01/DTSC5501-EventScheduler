@@ -2,7 +2,7 @@
 
 ## Roles 
 
-**Allen, Wesley:** Wesley was responsible for Part A, implementing an Array-based list and a Singly-linked list for storing events. He developed the overall structure for these lists and defined many basic operations for each. He also added placeholders for additional functions needed. Wesley helped the rest of the team refresh their GitHub skills and explained how to use Pytest.
+**Allen, Wesley:** Wesley was responsible for Part A, implementing an Array-based list and a Singly-linked list for storing events. He developed the overall structure for these lists and defined many basic operations for each. He also added placeholders for additional functions needed. Wesley helped the rest of the team refresh their GitHub skills and explained how to use Pytest. Wesley also implemented the experimentation and plotting for sorting in the main notebook.
 
 **Cheemalapati, Karan:** Karan was responsible for Part D
 
