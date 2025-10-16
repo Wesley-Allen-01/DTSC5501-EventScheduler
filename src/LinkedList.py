@@ -305,16 +305,16 @@ class LinkedList:
 
     
     def _binary_search(self, id):
-        sorted_self = self.sort_list(method="merge", by="id")
+        # sorted_self = self.sort_list(method="merge", by="id")
         start = time.time()
         # set left/right indexes
         left_idx = 0
-        right_idx = sorted_self.length - 1
+        right_idx = self.length - 1
         counter = 1
         # while loop
         while left_idx <= right_idx:
             mid_idx = (left_idx + right_idx)//2
-            mid_node = sorted_self._node_at_idx(mid_idx)
+            mid_node = self._node_at_idx(mid_idx)
 
             if mid_node.event.id == id:
                 end = time.time()

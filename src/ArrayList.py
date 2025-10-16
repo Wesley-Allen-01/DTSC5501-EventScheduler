@@ -106,13 +106,17 @@ class ArrayList:
         if method == "insertion":
             self._insertion_sort(self.events, by)
         elif method == "merge":
-            self.events = self._merge_sort(self.events, by)
+            sorted_list = ArrayList()
+            sorted_list.events = self._merge_sort(self.events, by)
+            return sorted_list
         elif method == "quick":
-            self.events = self._quick_sort(self.events, by)
+            sorted_list = ArrayList()
+            sorted_list.events = self._quick_sort(self.events, by)
+            return sorted_list
         else:
             print("ERROR: Invalid sort method")
             return
-        return 
+        return
 
     def _linear_search(self, id):
         start = time.time()
