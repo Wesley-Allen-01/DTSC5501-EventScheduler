@@ -133,7 +133,10 @@ class ArrayList:
         return None
     
     def _binary_search(self, id):
-        # sorted_self = self.sort_list(by="id",method="merge")
+        if not isinstance(id, int):
+            print("ERROR: id must be integer")
+            return None
+            
         start = time.time()
         # get left and right indexes
         left_index = 0
