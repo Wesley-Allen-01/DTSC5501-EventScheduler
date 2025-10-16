@@ -40,12 +40,13 @@ def create_event_dataset(n: int, type: str):
     def format_date(dt):
         return dt.strftime("%Y-%m-%d")
 
-    # pick Array or LinkedList
-    if type not in ["array", "ll"]:
-        raise ValueError("Invalid type. Must be 'array' or 'll'")
+    # # pick Array or LinkedList
+    # if type not in ["array", "ll"]:
+    #     raise ValueError("Invalid type. Must be 'array' or 'll'")
 
-    container = ArrayList() if type == "array" else LinkedList()
+    # container = ArrayList() if type == "array" else LinkedList()
 
+    event_list = []
     # make events
     for i in range(n):
         # Random date
@@ -76,6 +77,21 @@ def create_event_dataset(n: int, type: str):
             location=random.choice(cities),
         )
 
-        container.insert(event)
+        # container.insert(event)
+        event_list.append(event)
+
+    # Make "unsorted" data
+    random.shuffle(event_list)
+
+    # Array or LL
+    if type=="array":
+        container = ArrayList()
+    elif type=="ll":
+        container = LinkedList()
+    else:
+        raise ValueError('Type must be "array" or "ll"')
+
+    for ev in event_list:
+        container.insert(ev)
 
     return container

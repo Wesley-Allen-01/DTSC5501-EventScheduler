@@ -106,13 +106,21 @@ class ArrayList:
         if method == "insertion":
             self._insertion_sort(self.events, by)
         elif method == "merge":
+<<<<<<< HEAD
+            #self.events = self._merge_sort(self.events, by)
+=======
             sorted_arr = self._merge_sort(self.events, by)
+>>>>>>> b2b53957c30e0474977832d2658fe2ff354899b0
         elif method == "quick":
-            self._quick_sort(self.events, by)
+            self.events = self._quick_sort(self.events, by)
         else:
             print("ERROR: Invalid sort method")
             return
+<<<<<<< HEAD
+        #return self
+=======
         return sorted_arr
+>>>>>>> b2b53957c30e0474977832d2658fe2ff354899b0
 
     def _linear_search(self, id):
         start = time.time()
@@ -129,6 +137,7 @@ class ArrayList:
         return None
     
     def _binary_search(self, id):
+        # sorted_self = self.sort_list(by="id",method="merge")
         start = time.time()
         # get left and right indexes
         left_index = 0
